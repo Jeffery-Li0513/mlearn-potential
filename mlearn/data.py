@@ -25,12 +25,12 @@ def doc_from(structure, energy=None, force=None, stress=None):
     Returns:
         (dict)
     """
-    energy = energy if energy else 0.0
+    energy = energy if energy else 0.0                                  # 没有传入参数的话，能量、力、应力都设为0
     force = force if force else np.zeros((len(structure), 3))
     stress = stress if stress else np.zeros(6)
-    outputs = dict(energy=energy, forces=force,
+    outputs = dict(energy=energy, forces=force,                         # 将三者整理为一个字典
                    virial_stress=stress)
-    doc = dict(structure=structure.as_dict(),
+    doc = dict(structure=structure.as_dict(),                           # 最终输出的结构信息的格式，as_dict结果是什么？
                num_atoms=len(structure),
                outputs=outputs)
     return doc
@@ -39,7 +39,7 @@ def doc_from(structure, energy=None, force=None, stress=None):
 def pool_from(structures, energies=None, forces=None, stresses=None):
     """
     Method to convert structures and their properties in to
-    datapool format.
+    datapool format. 将多个结构转换
 
     Args:
         structures ([Structure]): The list of Pymatgen Structure object.
@@ -65,7 +65,7 @@ def pool_from(structures, energies=None, forces=None, stresses=None):
 def convert_docs(docs, include_stress=False, **kwargs):
     """
     Method to convert a list of docs into objects, e.g.,
-    Structure and DataFrame.
+    Structure and DataFrame. 重新整理结构数据，返回pymatgen中的Structure对象和pandas的DataFrame对象
     Args:
         docs ([dict]): List of docs. Each doc should have the same
             format as one returned from .dft.parse_dir.
@@ -86,7 +86,7 @@ def convert_docs(docs, include_stress=False, **kwargs):
         force_arr = np.array(outputs['forces'])
         assert force_arr.shape == (len(structure), 3), \
             'Wrong force array not matching structure'
-        force_arr = force_arr.ravel()
+        force_arr = force_arr.ravel()                           # 将数组维度拉为一维数组
 
         if include_stress:
             stress_arr = np.array(outputs['virial_stress'])
